@@ -1,0 +1,173 @@
+#Membuat list kosong yang akan diisi oleh data nim dan nilai clo 1-4
+mahasiswa = []
+
+# Membuat dictionary yang berisi list. 
+# List tiap CLO akan diisi oleh key adalah nama CLO dan value berupa list yang diisi oleh 4 elemen
+# 4 elemen: rata-rata semua mhs, nilai tertinggi, nilai terendah, dan jumlah yg tidak lulus (<=50)
+daftar_CLO = {
+  'CLO1': [],
+  'CLO2': [],
+  'CLO3': [],
+  'CLO4': []
+}
+
+#Membuat list kosong yang masing-masing akan diisi oleh hasil operasi dan fungsi
+clo1 = []
+clo2 = []
+clo3 = []
+clo4 = []
+
+#Memasukkan data dari file teks "mahasiswa.txt" ke dalam list mahasiswa
+def txt_to_dict():
+  #5 variabel dibawah merepresentasikan masing2 kolom di "mahasiswa.txt"
+  nim = [] 
+  clo1 = []
+  clo2 = []
+  clo3 = []
+  clo4 = []
+
+  #Looping untuk membaca file
+  with open('mahasiswa.txt','r') as file:
+    for line in file:                         
+      i = 0
+      for data in line.split():
+        if i == 0:
+          nim.append(data)
+
+        elif i == 1:
+          clo1.append(data)
+
+        elif i == 2:
+          clo2.append(data)
+
+        elif i == 3:
+          clo3.append(data)
+
+        elif i == 4:
+          clo4.append(data)
+
+        elif i == 5:
+          i = 0
+
+        i += 1
+
+  #Looping untuk memasukkan data dari file ke list mahasiswa
+  for n in range(len(nim)):
+    data = {
+      'nim': nim[n],
+      'clo1': int(clo1[n]),
+      'clo2': int(clo2[n]),
+      'clo3': int(clo3[n]),
+      'clo4': int(clo4[n]),
+    }
+
+    mahasiswa.append(data)
+
+#Fungsi dan looping untuk mendapatkan data nilai-nilai CLO per mahasiswa
+def get_data_clo(clo):
+  clo_list = []
+  for n in range(len(mahasiswa)):
+    clo_list.append(mahasiswa[n][clo])
+
+  return clo_list
+
+#JAWABAN POIN A
+def rerata(clo1, clo2, clo3, clo4):
+  #Menghitung rata-rata tiap CLO
+  def hitung_rerata(clo):
+    semua_nilai = 0
+    #Looping untuk menjumlahkan semua nilai pada satu CLO
+    for n in range(len(mahasiswa)):
+      semua_nilai += clo[n]
+
+    #Menghitung rata-rata tiap CLO
+    rerata = semua_nilai / len(mahasiswa)
+    return rerata
+
+  daftar_CLO['CLO1'].append(hitung_rerata(clo1))
+  daftar_CLO['CLO2'].append(hitung_rerata(clo2))
+  daftar_CLO['CLO3'].append(hitung_rerata(clo3))
+  daftar_CLO['CLO4'].append(hitung_rerata(clo4))
+
+def nilai_max(clo1, clo2, clo3, clo4):
+  def get_nilai_max(nilai):
+    max = nilai[0]
+    
+    #Looping untuk mendapatkan nilai tertinggi dari tiap-tiap CLO
+    for x in nilai:
+      if x > max :
+        max = x
+
+    return max
+
+  daftar_CLO['CLO1'].append(get_nilai_max(clo1))
+  daftar_CLO['CLO2'].append(get_nilai_max(clo2))
+  daftar_CLO['CLO3'].append(get_nilai_max(clo3))
+  daftar_CLO['CLO4'].append(get_nilai_max(clo4))
+
+def nilai_min(clo1, clo2, clo3, clo4):
+  def get_nilai_min(nilai):
+    min = nilai[0]
+
+    #Looping untuk mendapatkan nilai terendah dari tiap-tiap CLO
+    for x in nilai:
+      if x < min :
+        min = x
+
+    return min
+
+  daftar_CLO['CLO1'].append(get_nilai_min(clo1))
+  daftar_CLO['CLO2'].append(get_nilai_min(clo2))
+  daftar_CLO['CLO3'].append(get_nilai_min(clo3))
+  daftar_CLO['CLO4'].append(get_nilai_min(clo4))
+
+def tidak_lulus(clo1, clo2, clo3, clo4):
+  def dibawah_50(nilai):
+    jlh = 0
+
+    #Looping untuk mencari jumlah mahasiswa yang tidak lulus atau <=50
+    for x in nilai:
+      if x <= 50:
+        jlh += 1
+
+    return jlh
+
+  daftar_CLO['CLO1'].append(dibawah_50(clo1))
+  daftar_CLO['CLO2'].append(dibawah_50(clo2))
+  daftar_CLO['CLO3'].append(dibawah_50(clo3))
+  daftar_CLO['CLO4'].append(dibawah_50(clo4))
+
+#JAWABAN POIN B - Fungsi Report
+def report():
+  #Deklarasi fungsi report
+  def print_report(key, clo):
+    print()
+    print("DATA REPORT CLO", clo)
+    print("Rata-rata                          : ", key[0])
+    print("Nilai tertinggi                    : ", key[1])
+    print("Nilai terendah                     : ", key[2])
+    print("Nilai dibawah standar  kelulusan   : ", key[3])
+
+  #Mencetak fungsi report
+  print_report(daftar_CLO['CLO1'], 1)
+  print_report(daftar_CLO['CLO2'], 2)
+  print_report(daftar_CLO['CLO3'], 3)
+  print_report(daftar_CLO['CLO4'], 4)
+
+#JAWABAN POIN C - Fungsi Main Program
+def main(clo1, clo2, clo3, clo4):
+  txt_to_dict()                       #Memasukkan data dari file teks
+
+  clo1 = get_data_clo("clo1")         #Variabel untuk pemanggilan data
+  clo2 = get_data_clo("clo2")
+  clo3 = get_data_clo("clo3")
+  clo4 = get_data_clo("clo4")
+
+  rerata(clo1, clo2, clo3, clo4)       #Hasil rata-rata tiap CLO
+  nilai_max(clo1, clo2, clo3, clo4)    #Hasil nilai tertinggi tiap CLO
+  nilai_min(clo1, clo2, clo3, clo4)    #Hasil nilai terendah di tiap CLO
+  tidak_lulus(clo1, clo2, clo3, clo4)  #Hasil jumlah mahasiswa yang tidak lulus standar 
+  print("daftar_CLO: ", daftar_CLO)    #Mencetak dictionary
+  report()                             #Fungsi report
+
+main(clo1, clo2, clo3, clo4)
